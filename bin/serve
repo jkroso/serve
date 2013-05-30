@@ -14,6 +14,7 @@ var resolve = require('path').resolve
   , url = require('url')
   , fs = require('fs')
   , http = require('http')
+  , compiler = require('../compile-js')
 
 // CLI
 
@@ -92,15 +93,19 @@ if (program.cors) {
     next();
   });
 }
+
+// js compiler (browserify)
+app.use(compiler(path, program))
+
 // static files
 app.use(connect.static(path, { hidden: program.hidden }));
 
 // directory serving
 
 if (program.dirs) {
-    app.use(connect.directory(path, {
-      hidden: program.hidden
-    , icons: program.icons
+  app.use(connect.directory(path, {
+    hidden: program.hidden,
+    icons: program.icons
   }));
 }
 

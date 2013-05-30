@@ -13,7 +13,8 @@
     "jade": "*",
     "less-middleware": "*",
     "connect": "~2.7.10",
-    "commander": "1.1.1"
+    "commander": "1.1.1",
+    "cheerio": "0.11.0"
   },
   "bin": {
     "serve": "./bin/serve"
