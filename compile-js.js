@@ -68,6 +68,10 @@ module.exports = function(base, opts){
 			if (scripts.length == 1 && typeof script.attribs.src != 'string') {
 				graph.clear()
 				script = script.children[0].data
+				// remove indentation
+				if ((/\n(\s+)[^\s]/).test(script)) {
+					script = script.replace(new RegExp('^' + RegExp.$1, 'mg'), '')
+				}
 				var file = graph.graph[path] = {
 					path: path,
 					'last-modified': stat.mtime,

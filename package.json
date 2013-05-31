@@ -14,7 +14,9 @@
     "less-middleware": "*",
     "connect": "~2.7.10",
     "commander": "1.1.1",
-    "cheerio": "0.11.0"
+    "cheerio": "0.11.0",
+    "sourcegraph": "~0.7.2",
+    "bigfile": "~0.5.2"
   },
   "bin": {
     "serve": "./bin/serve"
