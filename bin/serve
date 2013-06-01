@@ -24,6 +24,7 @@ program
   .option('-F, --format <fmt>', 'specify the log format string', 'dev')
   .option('-p, --port <port>', 'specify the port [3000]', Number, 3000)
   .option('-m, --max <port>', 'specify the number of alternative ports to try', Number, 20)
+  .option('-B, --no-compile', 'disable js compilation')
   .option('-H, --hidden', 'enable hidden file serving')
   .option('-S, --no-stylus', 'disable stylus rendering')
   .option('-J, --no-jade', 'disable jade rendering')
@@ -94,8 +95,8 @@ if (program.cors) {
   });
 }
 
-// js compiler (browserify)
-app.use(compiler(path, program))
+// js compiler
+if (program.compile) app.use(compiler(path, program))
 
 // static files
 app.use(connect.static(path, { hidden: program.hidden }));
