@@ -1,12 +1,12 @@
 
-var path = require('path')
-	, join = path.join
-	, dirname = path.dirname
-	, fs = require('fs')
+var JS = require('sourcegraph/src/plugins/javascript').types[0]
 	, Graph = require('sourcegraph')
 	, Compiler = require('bigfile')
-	, JS = require('sourcegraph/src/plugins/javascript').types[0]
 	, cheerio = require('cheerio')
+  , path = require('path')
+	, dirname = path.dirname
+	, join = path.join
+	, fs = require('fs')
 
 module.exports = function(base, opts){
 	var graph = new Graph()
@@ -86,9 +86,7 @@ module.exports = function(base, opts){
 					build.entry = path
 					build.end = function send(code){
 						scripts[0].children[0].data = code
-							// TODO: fix this weird encoding issue properly
-							.replace(/ƒ/g, '$fn$')
-						res.setHeader('Content-Type', 'text/html')
+						res.setHeader('Content-Type', 'text/html; charset=utf-8')
 						res.end($.html())
 					}
 					build.send(values(graph.graph))
