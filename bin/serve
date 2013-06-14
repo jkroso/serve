@@ -19,21 +19,21 @@ var resolve = require('path').resolve
 // CLI
 
 program
-  .version('1.1.0')
+  .version(require('../package.json').version)
   .usage('[options] [dir]')
   .option('-F, --format <fmt>', 'specify the log format string', 'dev')
   .option('-p, --port <port>', 'specify the port [3000]', Number, 3000)
-  .option('-m, --max <port>', 'specify the number of alternative ports to try', Number, 20)
-  .option('-B, --no-compile', 'disable js compilation')
-  .option('-H, --hidden', 'enable hidden file serving')
+  .option('-r, --retries <port>', 'specify the number of alternative ports to try', Number, 20)
+  .option('-h, --hidden', 'enable hidden file serving')
+  .option('-f, --favicon <path>', 'serve the given favicon')
+  .option('-c, --cors', 'allows cross origin access serving')
+  .option('-J, --no-js', 'disable javascript consolidation')
   .option('-S, --no-stylus', 'disable stylus rendering')
-  .option('-J, --no-jade', 'disable jade rendering')
+  .option('    --no-jade', 'disable jade rendering')
   .option('    --no-less', 'disable less css rendering')
   .option('-I, --no-icons', 'disable icons')
   .option('-L, --no-logs', 'disable request logging')
   .option('-D, --no-dirs', 'disable directory serving')
-  .option('-f, --favicon <path>', 'serve the given favicon')
-  .option('-C, --cors', 'allows cross origin access serving')
   .parse(process.argv);
 
 // path
@@ -96,7 +96,7 @@ if (program.cors) {
 }
 
 // js compiler
-if (program.compile) app.use(compiler(path, program))
+if (program.js) app.use(compiler(path, program))
 
 // static files
 app.use(connect.static(path, { hidden: program.hidden }));
@@ -110,7 +110,7 @@ if (program.dirs) {
   }));
 }
 
-var max = program.port + program.max;
+var max = program.port + program.retries;
 
 // start the server
 function start(port){
