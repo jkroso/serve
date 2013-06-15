@@ -69,7 +69,7 @@ module.exports = function(base, opts){
 				graph.clear()
 				script = script.children[0].data
 				// remove indentation
-				if ((/\n(\s+)[^\s]/).test(script)) {
+				if ((/\n([ \t]+)[^\s]/).test(script)) {
 					script = script.replace(new RegExp('^' + RegExp.$1, 'mg'), '')
 				}
 				var file = graph.graph[path] = {
