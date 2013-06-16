@@ -30,7 +30,8 @@ module.exports = function(base, opts){
 		})
 
 	return function(req, res, next){
-		var path = join(base, req.url)
+		var url = req.url.split('?')[0]
+		var path = join(base, url)
 		var stat
 		try {
 			stat = fs.statSync(path)
