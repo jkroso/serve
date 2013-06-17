@@ -24,7 +24,7 @@ program
   .option('-F, --format <fmt>', 'specify the log format string', 'dev')
   .option('-p, --port <port>', 'specify the port [3000]', Number, 3000)
   .option('-r, --retries <port>', 'specify the number of alternative ports to try', Number, 20)
-  .option('-h, --hidden', 'enable hidden file serving')
+  .option('-H, --hidden', 'enable hidden file serving')
   .option('-f, --favicon <path>', 'serve the given favicon')
   .option('-c, --cors', 'allows cross origin access serving')
   .option('-J, --no-js', 'disable javascript consolidation')
