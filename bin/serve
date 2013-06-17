@@ -34,6 +34,7 @@ program
   .option('-I, --no-icons', 'disable icons')
   .option('-L, --no-logs', 'disable request logging')
   .option('-D, --no-dirs', 'disable directory serving')
+  .option('-R, --no-redirects', 'disable index.html redirects')
   .parse(process.argv);
 
 // path
@@ -95,6 +96,21 @@ if (program.cors) {
   });
 }
 
+// redirect directories to index.html
+if (program.redirects) {
+  app.use(function(req, res, next){
+    var url = req.url
+    var index = url + 'index.html'
+    if (/\/$/.test(url) && fs.existsSync(join(path, index))) {
+      res.statusCode = 302
+      res.setHeader('Location', index)
+      res.end('redirecting to ' + index)
+      return
+    }
+    next()
+  })
+}
+
 // js compiler
 if (program.js) app.use(js(path, program))
 
@@ -102,7 +118,6 @@ if (program.js) app.use(js(path, program))
 app.use(connect.static(path, { hidden: program.hidden }));
 
 // directory serving
-
 if (program.dirs) {
   app.use(connect.directory(path, {
     hidden: program.hidden,
