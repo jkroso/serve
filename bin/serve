@@ -6,15 +6,15 @@
 
 var resolve = require('path').resolve
   , join = require('path').join
+  , less = require('less-middleware')
   , program = require('commander')
   , connect = require('connect')
   , stylus = require('stylus')
+  , js = require('serve-js')
+  , http = require('http')
   , jade = require('jade')
-  , less = require('less-middleware')
   , url = require('url')
   , fs = require('fs')
-  , http = require('http')
-  , compiler = require('../compile-js')
 
 // CLI
 
@@ -96,7 +96,7 @@ if (program.cors) {
 }
 
 // js compiler
-if (program.js) app.use(compiler(path, program))
+if (program.js) app.use(js(path, program))
 
 // static files
 app.use(connect.static(path, { hidden: program.hidden }));
