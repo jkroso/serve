@@ -43,6 +43,12 @@ var path = resolve(program.args.shift() || '.');
 // setup the app
 var app = connect();
 
+// default encoding to utf8
+app.use(function(req, res, next){
+  res.setHeader('Content-Encoding', 'utf8')
+  next()
+})
+
 // ignore favicon
 app.use(connect.favicon(program.favicon));
 
