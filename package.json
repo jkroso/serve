@@ -1,6 +1,6 @@
 {
   "name": "serve",
-  "version": "1.4.0",
+  "version": "1.4.2",
   "description": "Simple command-line file / directory server built with connect",
   "keywords": [
     "static",
@@ -12,11 +12,14 @@
     "stylus": "*",
     "jade": "*",
     "less-middleware": "*",
-    "connect": "~2.7.10",
-    "commander": "1.1.1",
-    "serve-js": "~0.2.0"
+    "connect": "2.7.10",
+    "commander": "1.2.0",
+    "serve-js": "0.2.2"
   },
   "bin": {
     "serve": "./bin/serve"
+  },
+  "scripts": {
+    "install": "npm dedupe"
   }
 }
