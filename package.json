@@ -1,6 +1,6 @@
 {
   "name": "serve",
-  "version": "1.4.2",
+  "version": "1.4.3",
   "description": "Simple command-line file / directory server built with connect",
   "keywords": [
     "static",
@@ -14,7 +14,7 @@
     "less-middleware": "*",
     "connect": "2.7.10",
     "commander": "1.2.0",
-    "serve-js": "0.2.2"
+    "serve-js": "0.2.3"
   },
   "bin": {
     "serve": "./bin/serve"
