@@ -1,11 +1,6 @@
 #!/usr/bin/env node
 
-/**
- * Module dependencies.
- */
-
-var resolve = require('path').resolve
-  , join = require('path').join
+var md = require('markdown-middleware')
   , less = require('less-middleware')
   , program = require('commander')
   , connect = require('connect')
@@ -13,8 +8,11 @@ var resolve = require('path').resolve
   , js = require('serve-js')
   , http = require('http')
   , jade = require('jade')
+  , path = require('path')
   , url = require('url')
   , fs = require('fs')
+  , join = path.join
+  , resolve = path.resolve
 
 // CLI
 
@@ -29,6 +27,7 @@ program
   .option('-c, --cors', 'allows cross origin access serving')
   .option('-J, --no-js', 'disable javascript consolidation')
   .option('-S, --no-stylus', 'disable stylus rendering')
+  .option('-M, --no-markdown', 'disable markdown rendering')
   .option('    --no-jade', 'disable jade rendering')
   .option('    --no-less', 'disable less css rendering')
   .option('-I, --no-icons', 'disable icons')
@@ -115,6 +114,13 @@ if (program.redirects) {
     }
     next()
   })
+}
+
+// markdown compiler
+if (program.markdown) {
+  app.use(md({
+    directory: path
+  }))
 }
 
 // js compiler

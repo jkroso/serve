@@ -10,23 +10,27 @@
 ## Usage
 
 ```
-
 Usage: serve [options] [dir]
 
 Options:
 
-  -v, --version       output the version number
-  -F, --format <fmt>  specify the log format string
-  -p, --port <port>   specify the port [3000]
-  -H, --hidden        enable hidden file serving
-  -S, --no-stylus     disable stylus rendering
-  -J, --no-jade       disable jade rendering
-      --no-less       disable less css rendering
-  -I, --no-icons      disable icons
-  -L, --no-logs       disable request logging
-  -D, --no-dirs       disable directory serving
-  -h, --help          output usage information
-
+  -h, --help            output usage information
+  -V, --version         output the version number
+  -F, --format <fmt>    specify the log format string
+  -p, --port <port>     specify the port [3000]
+  -r, --retries <port>  specify the number of alternative ports to try
+  -H, --hidden          enable hidden file serving
+  -f, --favicon <path>  serve the given favicon
+  -c, --cors            allows cross origin access serving
+  -J, --no-js           disable javascript consolidation
+  -S, --no-stylus       disable stylus rendering
+  -M, --no-markdown     disable markdown rendering
+      --no-jade         disable jade rendering
+      --no-less         disable less css rendering
+  -I, --no-icons        disable icons
+  -L, --no-logs         disable request logging
+  -D, --no-dirs         disable directory serving
+  -R, --no-redirects    disable index.html redirects
 ```
 
 ## Examples
