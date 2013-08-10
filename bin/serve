@@ -1,13 +1,8 @@
 #!/usr/bin/env node
 
-var md = require('markdown-middleware')
-  , less = require('less-middleware')
-  , program = require('commander')
+var program = require('commander')
   , connect = require('connect')
-  , stylus = require('stylus')
-  , js = require('serve-js')
   , http = require('http')
-  , jade = require('jade')
   , path = require('path')
   , url = require('url')
   , fs = require('fs')
@@ -60,10 +55,12 @@ if (program.stylus) {
     req.url = req.url.replace(/\.styl$/, '.css');
     next();
   });
+  app.use(require('stylus').middleware({ src: path }));
 }
 
 // jade
 if (program.jade) {
+  var jade = require('jade')
   app.use(function(req, res, next){
     if (!req.url.match(/\.jade$/)) return next();
     var file = join(path, url.parse(req.url).pathname);
@@ -82,12 +79,9 @@ if (program.jade) {
   });
 }
 
-// stylus
-app.use(stylus.middleware({ src: path }));
-
 // less
 if (program.less) {
-  app.use(less({ src: path }));
+  app.use(require('less-middleware')({ src: path }));
 }
 
 // CORS access for files
@@ -118,13 +112,15 @@ if (program.redirects) {
 
 // markdown compiler
 if (program.markdown) {
-  app.use(md({
+  app.use(require('markdown-middleware')({
     directory: path
   }))
 }
 
 // js compiler
-if (program.js) app.use(js(path, program))
+if (program.js) {
+  app.use(require('serve-js')(path, program))
+}
 
 // static files
 app.use(connect.static(path, { hidden: program.hidden }));
