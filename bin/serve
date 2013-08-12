@@ -20,6 +20,7 @@ program
   .option('-H, --hidden', 'enable hidden file serving')
   .option('-f, --favicon <path>', 'serve the given favicon')
   .option('-c, --cors', 'allows cross origin access serving')
+  .option('-o, --open', 'open a browser tab to the servers root path')
   .option('-J, --no-js', 'disable javascript consolidation')
   .option('-S, --no-stylus', 'disable stylus rendering')
   .option('-M, --no-markdown', 'disable markdown rendering')
@@ -145,7 +146,9 @@ function start(port){
       start(port);
     })
     .listen(port, function () {
-      console.log('\033[90mserving \033[36m%s\033[90m on port \033[96m%d\033[0m', path, this.address().port);
+      var port = this.address().port
+      console.log('\033[90mserving \033[36m%s\033[90m on port \033[96m%d\033[0m', path, port);
+      if (program.open) require('opener')('http://localhost:'+port)
     })
 }
 
