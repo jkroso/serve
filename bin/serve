@@ -147,7 +147,7 @@ function start(port){
     })
     .listen(port, function () {
       var port = this.address().port
-      console.log('\033[90mserving \033[36m%s\033[90m on port \033[96m%d\033[0m', path, port);
+      console.log('http://localhost:%d', port)
       if (program.open) require('opener')('http://localhost:'+port)
     })
 }
