@@ -20,7 +20,7 @@ program
   .option('-H, --hidden', 'enable hidden file serving')
   .option('-f, --favicon <path>', 'serve the given favicon')
   .option('-c, --cors', 'allows cross origin access serving')
-  .option('-o, --open', 'open a browser tab to the servers root path')
+  .option('-o, --open [path]', 'open a browser tab to the servers root path')
   .option('-J, --no-js', 'disable javascript consolidation')
   .option('-S, --no-stylus', 'disable stylus rendering')
   .option('-M, --no-markdown', 'disable markdown rendering')
@@ -48,7 +48,9 @@ app.use(function(req, res, next){
 app.use(connect.favicon(program.favicon))
 
 // logger
-if (program.logs) app.use(connect.logger(program.format))
+if (program.logs) {
+  app.use(connect.logger(program.format))
+}
 
 // convert .styl to .css to trick stylus.middleware
 if (program.stylus) {
@@ -153,7 +155,13 @@ function start(port){
     .listen(port, function(){
       var port = this.address().port
       console.log('http://localhost:%d', port)
-      if (program.open) require('opener')('http://localhost:'+port)
+      if (program.open) {
+        require('opener')(''
+          + 'http://localhost:' + port 
+          + (typeof program.open == 'string' 
+            ? '/' + program.open
+            : ''))
+      }
     })
 }
 
