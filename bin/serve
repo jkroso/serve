@@ -1,13 +1,13 @@
 #!/usr/bin/env node
 
 var program = require('commander')
-  , connect = require('connect')
-  , http = require('http')
-  , path = require('path')
-  , url = require('url')
-  , fs = require('fs')
-  , join = path.join
-  , resolve = path.resolve
+var connect = require('connect')
+var http = require('http')
+var path = require('path')
+var url = require('url')
+var fs = require('fs')
+var join = path.join
+var resolve = path.resolve
 
 // CLI
 
@@ -15,8 +15,8 @@ program
   .version(require('../package.json').version)
   .usage('[options] [dir]')
   .option('-F, --format <fmt>', 'specify the log format string', 'dev')
-  .option('-p, --port <port>', 'specify the port [3000]', Number, 3000)
-  .option('-r, --retries <port>', 'specify the number of alternative ports to try', Number, 20)
+  .option('-p, --port <port>', 'specify the port [3000]', Number)
+  .option('-r, --retries <port>', 'specify the number of alternative ports to try', Number)
   .option('-H, --hidden', 'enable hidden file serving')
   .option('-f, --favicon <path>', 'serve the given favicon')
   .option('-c, --cors', 'allows cross origin access serving')
@@ -30,13 +30,13 @@ program
   .option('-L, --no-logs', 'disable request logging')
   .option('-D, --no-dirs', 'disable directory serving')
   .option('-R, --no-redirects', 'disable index.html redirects')
-  .parse(process.argv);
+  .parse(process.argv)
 
 // path
-var path = resolve(program.args.shift() || '.');
+var path = resolve(program.args.shift() || '.')
 
 // setup the app
-var app = connect();
+var app = connect()
 
 // default encoding to utf8
 app.use(function(req, res, next){
@@ -45,55 +45,55 @@ app.use(function(req, res, next){
 })
 
 // ignore favicon
-app.use(connect.favicon(program.favicon));
+app.use(connect.favicon(program.favicon))
 
 // logger
-if (program.logs) app.use(connect.logger(program.format));
+if (program.logs) app.use(connect.logger(program.format))
 
 // convert .styl to .css to trick stylus.middleware
 if (program.stylus) {
   app.use(function(req, res, next){
-    req.url = req.url.replace(/\.styl$/, '.css');
-    next();
-  });
-  app.use(require('stylus').middleware({ src: path }));
+    req.url = req.url.replace(/\.styl$/, '.css')
+    next()
+  })
+  app.use(require('stylus').middleware({ src: path }))
 }
 
 // jade
 if (program.jade) {
   var jade = require('jade')
   app.use(function(req, res, next){
-    if (!req.url.match(/\.jade$/)) return next();
-    var file = join(path, url.parse(req.url).pathname);
+    if (!req.url.match(/\.jade$/)) return next()
+    var file = join(path, url.parse(req.url).pathname)
     fs.readFile(file, 'utf8', function(err, str){
-      if (err) return next(err);
+      if (err) return next(err)
       try {
-        var fn = jade.compile(str, { filename: file });
-        str = fn();
-        res.setHeader('Content-Type', 'text/html');
-        res.setHeader('Content-Length', Buffer.byteLength(str));
-        res.end(str);
+        var fn = jade.compile(str, { filename: file })
+        str = fn()
+        res.setHeader('Content-Type', 'text/html')
+        res.setHeader('Content-Length', Buffer.byteLength(str))
+        res.end(str)
       } catch (err) {
-        next(err);
+        next(err)
       }
-    });
-  });
+    })
+  })
 }
 
 // less
 if (program.less) {
-  app.use(require('less-middleware')({ src: path }));
+  app.use(require('less-middleware')({ src: path }))
 }
 
 // CORS access for files
 if (program.cors) {
   app.use(function(req, res, next){
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With, Accept, x-csrf-token, origin');
-    if ('OPTIONS' == req.method) return res.end();
-    next();
-  });
+    res.setHeader('Access-Control-Allow-Origin', '*')
+    res.setHeader('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With, Accept, x-csrf-token, origin')
+    if ('OPTIONS' == req.method) return res.end()
+    next()
+  })
 }
 
 // redirect directories to index.html
@@ -124,32 +124,37 @@ if (program.js) {
 }
 
 // static files
-app.use(connect.static(path, { hidden: program.hidden }));
+app.use(connect.static(path, { hidden: program.hidden }))
 
 // directory serving
 if (program.dirs) {
   app.use(connect.directory(path, {
     hidden: program.hidden,
     icons: program.icons
-  }));
+  }))
 }
 
-var max = program.port + program.retries;
+if (program.port == null) {
+  program.port = 3000
+  if (program.retries == null) program.retries = 20
+}
+
+var max = program.port + (program.retries || 0)
 
 // start the server
 function start(port){
   http.createServer(app)
     .on('error', function(e){
-      if (e.message != 'listen EADDRINUSE') throw e;
-      if (port == max) throw new Error('can\'t find a free port');
-      console.log('\033[90mport \033[36m%d\033[90m is taken, trying \033[96m%d\033[0m instead', port, ++port);
-      start(port);
+      if (e.message != 'listen EADDRINUSE') throw e
+      if (port == max) throw new Error('can\'t find a free port')
+      console.log('\033[90mport \033[36m%d\033[90m is taken, trying \033[96m%d\033[0m instead', port, ++port)
+      start(port)
     })
-    .listen(port, function () {
+    .listen(port, function(){
       var port = this.address().port
       console.log('http://localhost:%d', port)
       if (program.open) require('opener')('http://localhost:'+port)
     })
 }
 
-start(program.port);
+start(program.port)
