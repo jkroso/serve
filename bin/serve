@@ -141,6 +141,9 @@ if (program.port == null) {
   if (program.retries == null) program.retries = 20
 }
 
+// error presentation
+app.use(connect.errorHandler())
+
 var max = program.port + (program.retries || 0)
 
 // start the server
