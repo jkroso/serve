@@ -84,7 +84,7 @@ if (program.jade) {
 
 // less
 if (program.less) {
-  app.use(require('less-middleware')({ src: path }))
+  app.use(require('less-middleware')(path))
 }
 
 // CORS access for files
