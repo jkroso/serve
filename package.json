@@ -8,9 +8,14 @@
   "dependencies": {
     "markdown-middleware": "*",
     "less-middleware": "*",
-    "commander": "^2.2.0",
-    "connect": "^2.13.0",
-    "serve-js": "^0.5.2",
+    "serve-favicon": "*",
+    "serve-static": "*",
+    "connect": "^3.0.0",
+    "errorhandler": "*",
+    "serve-index": "*",
+    "commander": "*",
+    "serve-js": "*",
+    "morgan": "*",
     "stylus": "*",
     "opener": "*",
     "jade": "*"

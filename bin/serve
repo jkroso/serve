@@ -45,11 +45,13 @@ app.use(function(req, res, next){
 })
 
 // ignore favicon
-app.use(connect.favicon(program.favicon))
+if (program.favicon != null) {
+  app.use(require('serve-favicon')(program.favicon))
+}
 
 // logger
 if (program.logs) {
-  app.use(connect.logger(program.format))
+  app.use(require('morgan')(program.format))
 }
 
 // convert .styl to .css to trick stylus.middleware
@@ -126,11 +128,11 @@ if (program.js) {
 }
 
 // static files
-app.use(connect.static(path, { hidden: program.hidden }))
+app.use(require('serve-static')(path, { hidden: program.hidden }))
 
 // directory serving
 if (program.dirs) {
-  app.use(connect.directory(path, {
+  app.use(require('serve-index')(path, {
     hidden: program.hidden,
     icons: program.icons
   }))
@@ -142,7 +144,7 @@ if (program.port == null) {
 }
 
 // error presentation
-app.use(connect.errorHandler())
+app.use(require('errorhandler')())
 
 var max = program.port + (program.retries || 0)
 
@@ -160,8 +162,8 @@ function start(port){
       console.log('http://localhost:%d', port)
       if (program.open) {
         require('opener')(''
-          + 'http://localhost:' + port 
-          + (typeof program.open == 'string' 
+          + 'http://localhost:' + port
+          + (typeof program.open == 'string'
             ? '/' + program.open
             : ''))
       }
