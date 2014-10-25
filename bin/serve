@@ -128,7 +128,7 @@ if (program.js) {
 }
 
 // static files
-app.use(require('serve-static')(path, { hidden: program.hidden }))
+app.use(require('serve-static')(path, { dotfiles: program.hidden }))
 
 // directory serving
 if (program.dirs) {
