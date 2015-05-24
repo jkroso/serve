@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+#!/usr/bin/env node --harmony_generators
 
 var program = require('commander')
 var connect = require('connect')
